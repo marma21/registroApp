@@ -1,17 +1,19 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 1
+      Lista de Registros
     </ion-title>
-  </ion-toolbar>
+  </ion-toolbar >
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+  <ion-list>
+    <ion-item button *ngFor="let reg of registros" [routerLink]="['/tabs', 'tab2', reg.id]">
+      <ion-label>
+        <h2>{{reg.lote }}</h2>
+        <p>{{ reg.camion }}</p>
+        <p>{{ reg.patente }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
