@@ -13,21 +13,28 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  
-  
-  <ion-list >
+
+
+  <ion-list>
     <ion-item-group *ngFor="let regby of regbyfecha">
-      <ion-item-divider color="success"><ion-checkbox color="danger" slot="end" [(ngModel)]="regby.enviar"></ion-checkbox> <H3><ion-label>{{regby.fecha}}</ion-label></H3> </ion-item-divider>
+      <ion-item-divider color="success">
+        
+          <ion-label color="dark"> <h3>{{regby.fecha}}</h3></ion-label>
+          <ion-checkbox color="danger" slot="start" [(ngModel)]="regby.enviar"></ion-checkbox>
+        
+      </ion-item-divider>
+
       <ion-item button *ngFor="let reg of regby.registros">
-        <ion-label  [routerLink]="['/tabs', 'tab2', reg.id]">
-          <h2 *ngIf="reg.tipo=='camion'">Camión Nro: {{reg.camion}} <p>Patente: {{ reg.patente }}</p></h2>
+        <ion-label [routerLink]="['/tabs', 'tab2', reg.id]">
+          <h2 *ngIf="reg.tipo=='camion'">Camión Nro: {{reg.camion}} <p>Patente: {{ reg.patente }}</p>
+          </h2>
           <h2 *ngIf="reg.tipo=='bolson'">Bolson: {{ reg.patente }}</h2>
         </ion-label>
         <ion-note slot="end">
           <ion-badge color="danger">{{reg.total}}</ion-badge>
         </ion-note>
-      
+
       </ion-item>
-      </ion-item-group>
-    </ion-list>
+    </ion-item-group>
+  </ion-list>
 </ion-content>

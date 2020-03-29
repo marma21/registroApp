@@ -65,7 +65,7 @@ export class Tab1Page {
     let line: any = ''
     line += 'Fecha y Lote' + '\r\n';
     line += registro.fecha + '\r\n';
-    line += 'Fecha;Lote;Tipo;Camion;Patente/Bolson;Total' + '\r\n';
+    line += 'Fecha,Lote,Tipo,Camion,Patente/Bolson,Total' + '\r\n';
     registro.registros.forEach(element => {
       line += element.fecha + ',' + element.lote + ','+ element.tipo + ','+ element.camion + ',' + element.patente + ',' + element.total + '\r\n';
     });
