@@ -2,7 +2,7 @@
   <ion-toolbar color="primary">
     <ion-title>Registros</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="sendRegistro()">
+      <ion-button (click)="sendRegistros()">
         <ion-icon name="send"></ion-icon>
       </ion-button>
       <ion-button (click)="addRegistro()">
@@ -17,7 +17,7 @@
   
   <ion-list >
     <ion-item-group *ngFor="let regby of regbyfecha">
-      <ion-item-divider color="success"><H3><ion-label>{{regby.fecha}}</ion-label></H3>  <ion-checkbox color="danger" slot="end" [(ngModel)]="regby.enviar"></ion-checkbox> </ion-item-divider>
+      <ion-item-divider color="success"><ion-checkbox color="danger" slot="end" [(ngModel)]="regby.enviar"></ion-checkbox> <H3><ion-label>{{regby.fecha}}</ion-label></H3> </ion-item-divider>
       <ion-item button *ngFor="let reg of regby.registros">
         <ion-label  [routerLink]="['/tabs', 'tab2', reg.id]">
           <h2 *ngIf="reg.tipo=='camion'">Camión Nro: {{reg.camion}} <p>Patente: {{ reg.patente }}</p></h2>
@@ -26,7 +26,8 @@
         <ion-note slot="end">
           <ion-badge color="danger">{{reg.total}}</ion-badge>
         </ion-note>
+      
       </ion-item>
-    </ion-item-group>
+      </ion-item-group>
     </ion-list>
 </ion-content>
