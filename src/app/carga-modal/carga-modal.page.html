@@ -1,6 +1,13 @@
 
 <ion-header>
-    <ion-toolbar text-center>
+    <ion-toolbar text-center color="success">
+      <ion-buttons slot="start">
+        <!-- <ion-back-button (click)="closeModal()"></ion-back-button> -->
+          <ion-button expand="block" (click)="closeModal()" >
+            <ion-icon name="arrow-back-outline"></ion-icon>
+          </ion-button>
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
       <ion-title>{{modalTitle}}</ion-title>
     </ion-toolbar>
   </ion-header>

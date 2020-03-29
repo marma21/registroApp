@@ -1,19 +1,32 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Lista de Registros
-    </ion-title>
-  </ion-toolbar >
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Registros</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="sendRegistro()">
+        <ion-icon name="send"></ion-icon>
+      </ion-button>
+      <ion-button (click)="addRegistro()">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-list>
-    <ion-item button *ngFor="let reg of registros" [routerLink]="['/tabs', 'tab2', reg.id]">
-      <ion-label>
-        <h2>{{reg.lote }}</h2>
-        <p>{{ reg.camion }}</p>
-        <p>{{ reg.patente }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+  
+  
+  <ion-list >
+    <ion-item-group *ngFor="let regby of regbyfecha">
+      <ion-item-divider color="success"><H3><ion-label>{{regby.fecha}}</ion-label></H3>  <ion-checkbox color="danger" slot="end" [(ngModel)]="regby.enviar"></ion-checkbox> </ion-item-divider>
+      <ion-item button *ngFor="let reg of regby.registros">
+        <ion-label  [routerLink]="['/tabs', 'tab2', reg.id]">
+          <h2 *ngIf="reg.tipo=='camion'">Camión Nro: {{reg.camion}} <p>Patente: {{ reg.patente }}</p></h2>
+          <h2 *ngIf="reg.tipo=='bolson'">Bolson: {{ reg.patente }}</h2>
+        </ion-label>
+        <ion-note slot="end">
+          <ion-badge color="danger">{{reg.total}}</ion-badge>
+        </ion-note>
+      </ion-item>
+    </ion-item-group>
+    </ion-list>
 </ion-content>

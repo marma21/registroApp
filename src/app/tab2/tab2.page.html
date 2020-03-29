@@ -5,6 +5,9 @@
     </ion-buttons>
     <ion-title>Registro</ion-title>
     <ion-buttons slot="end">
+      <ion-button (click)="updateRegistro()">
+        <ion-icon name="save-outline"></ion-icon>
+      </ion-button>
       <ion-button (click)="delete()">
         <ion-icon name="trash"></ion-icon>
       </ion-button>
@@ -12,8 +15,8 @@
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
- 
-  <ion-segment [(ngModel)]="selectedView">
+
+  <ion-segment [(ngModel)]="selectedView" color="warning">
     <ion-segment-button value="camion">
       <ion-label>Camión</ion-label>
     </ion-segment-button>
@@ -21,59 +24,63 @@
       <ion-label>Bolson</ion-label>
     </ion-segment-button>
   </ion-segment>
-
+  <div *ngIf="registro">
   <div [ngSwitch]="selectedView">
     <div *ngSwitchCase="'camion'">
-    <ion-item>
-      <ion-label position="fixed">Fecha</ion-label>
-      <ion-datetime displayFormat="DD/MM/YYYY" min="2020" max="2030" [ngModel]="registro?.fecha"></ion-datetime>
-    </ion-item>
-    <ion-item>
-      <ion-label position="fixed">Lote</ion-label>
-      <ion-input [ngModel]="registro?.lote"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="fixed">Camión</ion-label>
-      <ion-input [ngModel]="registro?.camion" type="number"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="fixed">Patente</ion-label>
-      <ion-input [ngModel]="registro?.patente"></ion-input>
-    </ion-item>
-  </div>
-  
-  <div *ngSwitchCase="'bolson'">
-    <ion-item>
-      <ion-label position="fixed">Fecha</ion-label>
-      <ion-datetime displayFormat="DD/MM/YYYY" min="2020" max="2030" [ngModel]="registro?.fecha"></ion-datetime>
-    </ion-item>
-    <ion-item>
-      <ion-label position="fixed">Lote</ion-label>
-      <ion-input [ngModel]="registro?.lote"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="fixed">Bolson</ion-label>
-      <ion-input [ngModel]="registro?.bolson" type="text"></ion-input>
-    </ion-item>
-  </div>
-  <ion-card>
-    <ion-button expand="block" (click)="openModal()">Agregar Carga</ion-button>
-    <ion-card-content>
-      <ion-list>
-        <ion-item-sliding *ngFor="let kilo of registro?.kilos; let i = index">
-          <ion-item>
-            <ion-label>
-              <h2>{{kilo}}</h2>
-            </ion-label>
-          </ion-item>
-          <ion-item-options side="end">
-            <ion-item-option (click)="deleteKilo(i)"  color="danger" >
-              <ion-icon name="trash"></ion-icon>
-            </ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
+      <ion-item>
+        <ion-label position="fixed">Fecha</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY" min="2020" max="2030" [(ngModel)]="registro.fecha"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label position="fixed">Lote</ion-label>
+        <ion-input [(ngModel)]="registro.lote"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="fixed">Nro de Camión</ion-label>
+        <ion-input [(ngModel)]="registro.camion" type="number"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="fixed">Patente</ion-label>
+        <ion-input [(ngModel)]="registro.patente"></ion-input>
+      </ion-item>
+    </div>
+
+    <div *ngSwitchCase="'bolson'">
+      <ion-item>
+        <ion-label position="fixed">Fecha</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY" min="2020" max="2030" [(ngModel)]="registro.fecha"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label position="fixed">Lote</ion-label>
+        <ion-input [(ngModel)]="registro.lote"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="fixed">Bolson</ion-label>
+        <ion-input [(ngModel)]="registro.patente" type="text"></ion-input>
+      </ion-item>
+    </div>
+    </div>
+    <ion-card>
+      <!-- <ion-list> -->
+        <ion-item>
+          <ion-button expand="block" (click)="openModal()">Agregar Carga
+          </ion-button>
+            <ion-badge slot="end" color="danger">{{registro.total}}</ion-badge>
+        </ion-item>
+      <!-- </ion-list> -->
+      <ion-card-content>
+        <ion-list>
+          <ion-item-sliding *ngFor="let kilo of registro?.kilos; let i = index">
+            <ion-item slot="end"><ion-label class="ion-text-right"><h1>{{kilo}}</h1></ion-label>
+            </ion-item>
+            <ion-item-options side="end">
+              <ion-item-option (click)="deleteKilo(i)" color="danger">
+                <ion-icon name="trash"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
   </div>
 </ion-content>

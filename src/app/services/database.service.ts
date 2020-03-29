@@ -13,9 +13,31 @@ export interface Reg {
   patente:string,
   fecha:string,
   tipo:string,
-  bolson:string
+  total:number,
+  enviado:boolean
 }
  
+export interface GroupedByfecha {
+  key?: string;
+  regs?: Reg[];
+}
+
+export interface Regbyfecha {
+  fecha: string,
+  enviar:boolean,
+  registros: {
+    id: number,
+    lote: string,
+    kilos: any[],
+    camion: number,
+    patente: string,
+    fecha: string,
+    tipo: string,
+    total: number,
+    enviado: boolean
+  }
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -59,7 +81,7 @@ export class DatabaseService {
   }
  
   loadRegistros() {
-    return this.database.executeSql('SELECT * FROM registro', []).then(data => {
+    return this.database.executeSql('SELECT * FROM registro ORDER BY fecha desc, lote, camion', []).then(data => {
       let registros: Reg[] = [];
  
       if (data.rows.length > 0) {
@@ -77,7 +99,8 @@ export class DatabaseService {
             fecha: data.rows.item(i).fecha,
             patente: data.rows.item(i).patente,
             tipo:data.rows.item(i).tipo,
-            bolson:data.rows.item(i).bolson
+            total:data.rows.item(i).total,
+            enviado:data.rows.item(i).enviado
            });
         }
       }
@@ -85,10 +108,10 @@ export class DatabaseService {
     });
   }
  
-  addRegistro(name, skills, img) {
-    let data = [name, JSON.stringify(skills), img];
-    return this.database.executeSql('INSERT INTO registro ( lote , tipo, bolson, camion,fecha,patente, kilos ) VALUES (?, ?, ?)', data).then(data => {
-      this.loadRegistros();
+  addRegistro() {
+    let data = ['camion'];
+    return this.database.executeSql('INSERT INTO registro (tipo) VALUES (?)', data).then(data => {
+      return data.insertId;
     });
   }
  
@@ -106,8 +129,9 @@ export class DatabaseService {
         camion: data.rows.item(0).camion,
         fecha: data.rows.item(0).fecha,
         patente: data.rows.item(0).patente,
-        bolson:data.rows.item(0).bolson,
-        tipo:data.rows.item(0).tipo
+        total:data.rows.item(0).total,
+        tipo:data.rows.item(0).tipo,
+        enviado:data.rows.item(0).enviado
       }
     });
   }
@@ -119,8 +143,8 @@ export class DatabaseService {
   }
  
   async updateRegistro(reg: Reg) {
-    let data = [reg.lote,reg.tipo, reg.bolson, reg.camion,reg.fecha,reg.patente, JSON.stringify(reg.kilos)];
-    return this.database.executeSql(`UPDATE registro SET lote = ?, tipo=?, bolson=?, camion=?,fecha = ?,patente=? , kilos = ? WHERE id = ${reg.id}`, data).then(data => {
+    let data = [reg.lote,reg.tipo, reg.total, reg.camion,reg.fecha,reg.patente, JSON.stringify(reg.kilos)];
+    return this.database.executeSql(`UPDATE registro SET lote = ?, tipo=?, total=?, camion=?,fecha = ?,patente=? , kilos = ? WHERE id = ${reg.id}`, data).then(data => {
       this.loadRegistros();
     })
   }

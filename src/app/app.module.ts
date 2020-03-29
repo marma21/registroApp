@@ -12,9 +12,11 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
 import { SQLite } from '@ionic-native/sqlite/ngx';
  
 import { HttpClientModule } from '@angular/common/http';
-
-
 import { CargaModalPageModule } from './carga-modal/carga-modal.module'
+
+import { PapaParseModule } from 'ngx-papaparse';
+import { File } from '@ionic-native/file/ngx';
+import {SocialSharing} from '@ionic-native/social-sharing/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,12 +26,15 @@ import { CargaModalPageModule } from './carga-modal/carga-modal.module'
     IonicModule.forRoot(), 
     AppRoutingModule,
     CargaModalPageModule,
-    HttpClientModule],
+    HttpClientModule,
+    PapaParseModule],
   providers: [
     StatusBar,
     SplashScreen,
     SQLite,
     SQLitePorter,
+    File,
+    SocialSharing,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

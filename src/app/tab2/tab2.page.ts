@@ -2,13 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { DatabaseService, Reg } from '../services/database.service';
 import { ActivatedRoute, Router } from '@angular/router'
 import { ModalController } from '@ionic/angular';
-import {CargaModalPage} from '../carga-modal/carga-modal.page';
+import { CargaModalPage } from '../carga-modal/carga-modal.page';
 import { ToastController } from '@ionic/angular';
+import { DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss']
+  styleUrls: ['tab2.page.scss'],
+  providers:[DatePipe]
 })
 export class Tab2Page {
   
@@ -16,14 +18,16 @@ export class Tab2Page {
   dataReturned:any;
   registro: Reg=null;
   kilos:any[];
-  constructor(private modalController:ModalController, private route: ActivatedRoute, private db: DatabaseService, private router: Router, private toast: ToastController) { 
+  totalkilos:number;
+
+  constructor(private datePipe:DatePipe, private modalController:ModalController, private route: ActivatedRoute, private db: DatabaseService, private router: Router, private toast: ToastController) { 
   this.route.paramMap.subscribe(params => {
     let regId = params.get('id');
 
     this.db.getRegistro(regId).then(data => {
       this.registro = data;
       this.kilos = this.registro.kilos;
-      console.log(this.registro);
+      this.totalkilos = this.kilos.reduce((a, b) => a + b, 0);
     });
   });
 }
@@ -41,10 +45,10 @@ async openModal() {
   });
 
   modal.onDidDismiss().then((dataReturned) => {
-    if (dataReturned !== null) {
+    if (dataReturned.data !== undefined) {
       this.kilos.push( dataReturned.data);
-      this.updateRegistro();      
-      //alert('Modal Sent Data :'+ dataReturned);
+      this.registro.total = this.kilos.reduce((a, b) => a + b, 0);
+      this.updateRegistro();
     }
   });
 
@@ -52,12 +56,12 @@ async openModal() {
 }
 updateRegistro() {
   let kilos = this.kilos;
-  // skills = skills.map(skill => skill.trim());
   this.registro.kilos = kilos;
-
+  this.registro.tipo=this.selectedView;
+  this.registro.fecha = this.datePipe.transform(this.registro.fecha,'yyyy-MM-dd')
   this.db.updateRegistro(this.registro).then(async (res) => {
     let toast = await this.toast.create({
-      message: 'Kilos agregados',
+      message: 'Registro actualizado',
       duration: 3000
     });
     toast.present();
@@ -69,6 +73,7 @@ deleteKilo(index){
   if(index > -1){
     this.kilos.splice(index, 1);
     this.registro.kilos = this.kilos;
+    this.registro.total = this.kilos.reduce((a, b) => a + b, 0);
     this.db.updateRegistro(this.registro).then(async (res) => {
       let toast = await this.toast.create({
         message: 'Kilos eliminados',
