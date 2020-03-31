@@ -26,7 +26,7 @@
 
       <ion-item button *ngFor="let reg of regby.registros">
         <ion-label [routerLink]="['/tabs', 'tab2', reg.id]">
-          <h2 *ngIf="reg.tipo=='camion'">Camión Nro: {{reg.camion}} <p>Patente: {{ reg.patente }}</p>
+          <h2 *ngIf="reg.tipo=='camion'">Nro Camión: {{reg.camion}} <p>Patente: {{ reg.patente }}</p>
           </h2>
           <h2 *ngIf="reg.tipo=='bolson'">Bolson: {{ reg.patente }}</h2>
         </ion-label>

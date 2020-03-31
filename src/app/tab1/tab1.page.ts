@@ -5,6 +5,7 @@ import { GroupByPipe } from 'ngx-pipes';
 import { File } from '@ionic-native/file/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { Platform } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab1',
@@ -18,7 +19,7 @@ export class Tab1Page {
   regbyfecha: Regbyfecha[] = [];
   csvcontent:any;
 
-  constructor(private db: DatabaseService, private router: Router, private groupby: GroupByPipe, private file: File, private plt: Platform, private socialSharing: SocialSharing) { }
+  constructor(private toast:ToastController ,private db: DatabaseService, private router: Router, private groupby: GroupByPipe, private file: File, private plt: Platform, private socialSharing: SocialSharing) { }
 
   ngOnInit() {
     this.db.getDatabaseState().subscribe(rdy => {
@@ -48,24 +49,26 @@ export class Tab1Page {
 
   sendRegistros() {
     let csv: any = '';
+    let date = new Date();
     for (const property in this.regbyfecha) {
       if (this.regbyfecha[property].enviar) {
         csv += this.convertToCSV(this.regbyfecha[property]);
       };
     };
     if (this.plt.is("cordova")) {
-      this.file.writeFile(this.file.dataDirectory, 'data.csv', csv, { replace: true }).then(res => {
-
-        this.socialSharing.share('Registros de carga' + '\r\n' + csv, null, res.nativeURL, null);
-      });
+      this.file.writeFile(this.file.dataDirectory, 'registro.csv', csv, { replace: true }).then(res => {
+        this.socialSharing.share('Registros de carga' + '\r\n' + csv, 'Datos enviados ' + date, res.nativeURL, null);
+      }).catch((err) => {
+        console.log(err);
+    }); ;
     }
   };
 
   convertToCSV(registro) {
-    let line: any = ''
+    let line: any = '';
     line += 'Fecha y Lote' + '\r\n';
     line += registro.fecha + '\r\n';
-    line += 'Fecha,Lote,Tipo,Camion,Patente/Bolson,Total' + '\r\n';
+    line += 'Fecha,Lote,Tipo,Nro Camion,Patente/Bolson,Total' + '\r\n';
     registro.registros.forEach(element => {
       line += element.fecha + ',' + element.lote + ','+ element.tipo + ','+ element.camion + ',' + element.patente + ',' + element.total + '\r\n';
     });

@@ -28,6 +28,7 @@ export class Tab2Page {
       this.registro = data;
       this.kilos = this.registro.kilos;
       this.totalkilos = this.kilos.reduce((a, b) => a + b, 0);
+      this.selectedView=data.tipo;
     });
   });
 }
