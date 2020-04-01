@@ -6,7 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { DatabaseService, Reg } from './services/database.service';
 
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite/ngx';
+import { SQLiteObject } from '@ionic-native/sqlite/ngx';
 
 @Component({
   selector: 'app-root',

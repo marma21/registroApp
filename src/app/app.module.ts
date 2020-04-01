@@ -12,7 +12,6 @@ import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
 import { SQLite } from '@ionic-native/sqlite/ngx';
  
 import { HttpClientModule } from '@angular/common/http';
-import { CargaModalPageModule } from './carga-modal/carga-modal.module'
 
 import { PapaParseModule } from 'ngx-papaparse';
 import { File } from '@ionic-native/file/ngx';
@@ -25,7 +24,6 @@ import {SocialSharing} from '@ionic-native/social-sharing/ngx';
     BrowserModule, 
     IonicModule.forRoot(), 
     AppRoutingModule,
-    CargaModalPageModule,
     HttpClientModule,
     PapaParseModule],
   providers: [

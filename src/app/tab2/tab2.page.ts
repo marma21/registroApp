@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { DatabaseService, Reg } from '../services/database.service';
 import { ActivatedRoute, Router } from '@angular/router'
-import { ModalController } from '@ionic/angular';
-import { CargaModalPage } from '../carga-modal/carga-modal.page';
 import { ToastController } from '@ionic/angular';
 import { DatePipe} from '@angular/common';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab2',
@@ -20,7 +19,7 @@ export class Tab2Page {
   kilos:any[];
   totalkilos:number;
 
-  constructor(private datePipe:DatePipe, private modalController:ModalController, private route: ActivatedRoute, private db: DatabaseService, private router: Router, private toast: ToastController) { 
+  constructor(public alertController: AlertController,private datePipe:DatePipe, private route: ActivatedRoute, private db: DatabaseService, private router: Router, private toast: ToastController) { 
   this.route.paramMap.subscribe(params => {
     let regId = params.get('id');
 
@@ -37,24 +36,6 @@ ngOnInit() {
   
 }
 
-async openModal() {
-  const modal = await this.modalController.create({
-    component: CargaModalPage,
-    componentProps: {
-      "paramTitle": "Cargar Kilos"
-    }
-  });
-
-  modal.onDidDismiss().then((dataReturned) => {
-    if (dataReturned.data !== undefined) {
-      this.kilos.push( dataReturned.data);
-      this.registro.total = this.kilos.reduce((a, b) => a + b, 0);
-      this.updateRegistro();
-    }
-  });
-
-  return await modal.present();
-}
 updateRegistro() {
   let kilos = this.kilos;
   this.registro.kilos = kilos;
@@ -91,5 +72,38 @@ delete() {
   });
 }
 
+async presentAlertPrompt() {
+  const alert = await this.alertController.create({
+    header: 'Ingrese kilos',
+    inputs: [
+      {
+        name: 'kilos',
+        type: 'number',
+        placeholder: 'Kilos'
+      },
+    ],
+    buttons: [
+      {
+        text: 'Cancelar',
+        role: 'cancel',
+        cssClass: 'secondary',
+        handler: () => {
+          
+        }
+      }, {
+        text: 'Agregar',
+        handler: (alertData) => {
+          let kilosingresados:number = +alertData.kilos; 
+          if (kilosingresados !== undefined && kilosingresados > 0 ) {
+            this.kilos.push( kilosingresados );
+            this.registro.total = this.kilos.reduce((a, b) => a + b, 0);
+            this.updateRegistro();
+          }
+        }
+      }
+    ]
+  });
 
+  await alert.present();
+}
 }
