@@ -38,6 +38,7 @@ ngOnInit() {
 
 updateRegistro() {
   let kilos = this.kilos;
+  this.registro.patente = this.registro.patente.toUpperCase();
   this.registro.kilos = kilos;
   this.registro.tipo=this.selectedView;
   this.registro.fecha = this.datePipe.transform(this.registro.fecha,'yyyy-MM-dd')
